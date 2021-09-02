@@ -27,7 +27,7 @@ public class Account implements Serializable{
 	
 	private String number;
 	
-	@OneToOne
+	@OneToOne(mappedBy = "account")
 	private Customer customer;
 	
 	@NotNull

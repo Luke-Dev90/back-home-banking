@@ -2,6 +2,7 @@ package com.lchalela.banking.models;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,16 +23,22 @@ public class Customer implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@NotEmpty
 	private String name;
 	@NotEmpty
 	private String lastname;
+	
+	@NotEmpty
+	@Column(unique=true)
+	private String dni;
 
 	@Size(min = 5, max = 20)
 	private String password;
 
 	@Email
 	@NotEmpty
+	@Column(unique=true)
 	private String email;
 
 	@OneToOne(fetch = FetchType.EAGER)
