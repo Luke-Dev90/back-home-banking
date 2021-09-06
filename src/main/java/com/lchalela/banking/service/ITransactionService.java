@@ -7,6 +7,8 @@ import com.lchalela.banking.models.Transaction;
 public interface ITransactionService {
 	
 	public Transaction saveTransaction(Transaction transaction);
+
+	public Transaction getById(Long id); 
 	
 	public List<Transaction> getBySender();
 	
@@ -14,4 +16,6 @@ public interface ITransactionService {
 	
 	public List<Transaction> byAccountId(Long id);
 	
+	
+	public List<Transaction> listAllTransactions();
 }

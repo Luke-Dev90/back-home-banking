@@ -17,6 +17,15 @@ public class TransactionImpl implements ITransactionService{
 	@Autowired
 	private IAccountService accountService;
 	
+	public List<Transaction> listAllTransactions(){
+		List<Transaction> transactions =(List<Transaction>) this.transactionRepository.findAll();
+		
+		if(transactions.isEmpty()) {
+			// new ExceptionListNotFound
+		}
+		return transactions;
+	}
+	
 	@Override
 	public Transaction saveTransaction(Transaction transaction) {
 		
@@ -69,6 +78,15 @@ public class TransactionImpl implements ITransactionService{
 	public List<Transaction> byAccountId(Long id) {
 		// implements list by transactions where id account = id transaction.
 		return null;
+	}
+
+	@Override
+	public Transaction getById(Long id) {
+			Transaction transaction = this.transactionRepository.findById(id).orElse(null);
+			if(transaction == null) {
+				// throw new Exception
+			}
+		return transaction;
 	}
 
 }
