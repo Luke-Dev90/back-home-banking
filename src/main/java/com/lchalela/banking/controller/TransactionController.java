@@ -3,6 +3,7 @@ package com.lchalela.banking.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -39,7 +40,10 @@ public class TransactionController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> getTransactionId(@PathVariable String id){
 		response.clear();
-		Transaction transaction = this.transactionService.getById(Long.parseLong(id));
+		
+		Transaction transaction =  Optional.of(this.transactionService.getById(Long.parseLong(id)))
+				.orElseThrow( ()-> new NumberFormatException());
+		
 		response.put("message", "transaction found successfully");
 		response.put("transaction", transaction);
 		return new ResponseEntity<>(response,HttpStatus.OK);

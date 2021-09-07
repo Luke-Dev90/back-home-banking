@@ -24,13 +24,23 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(AccountNotFoundID.class)
 	public ResponseEntity<Object> accountNotFoundId(AccountNotFoundID ex, WebRequest request){
+		response.clear();
 		response.put("message", "Account not found with id " + ex.getLocalizedMessage());
 		response.put("timestamp", LocalDateTime.now());
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(NumberFormatException.class)
+	public ResponseEntity<Object> numberFormatException(NumberFormatException ex, WebRequest request){
+		response.clear();
+		response.put("message", "Id is invalid format, please enter valid format number");
+		response.put("timestamp", LocalDateTime.now());
+		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(AccountNotFoundNumber.class)
 	public ResponseEntity<Object> accountNotFoundNumber(AccountNotFoundNumber ex, WebRequest request){
+		response.clear();
 		response.put("message", "The account number not found, please enter account number correct");
 		response.put("timestamp", LocalDateTime.now());
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
@@ -38,6 +48,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(ListAccountsNotFoundException.class)
 	public ResponseEntity<Object> listAccountsNotFoundException(ListAccountsNotFoundException ex, WebRequest request){
+		response.clear();
 		response.put("message", "Not found, list is empty");
 		response.put("timestamp",LocalDateTime.now());
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
@@ -48,6 +59,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(CustomerNotFoundId.class)
 	public ResponseEntity<Object> customerNotFoundId(CustomerNotFoundId ex, WebRequest request){
+		response.clear();
 		response.put("message", "Not found customer with id: " + ex.getLocalizedMessage());
 		response.put("timestap", LocalDateTime.now());
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
@@ -55,6 +67,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(ListNotFoundCustomers.class)
 	public ResponseEntity<Object> listNotFoundCustomers(ListNotFoundCustomers ex, WebRequest request){
+		response.clear();
 		response.put("message", "Not found list coustomers");
 		response.put("timestamp", LocalDateTime.now());
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
@@ -64,6 +77,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(ListTransactionNotFoundException.class)
 	public ResponseEntity<Object> listTransactionNotFoundException(ListTransactionNotFoundException ex, WebRequest request){
+		response.clear();
 		response.put("message", "Not found list transactions");
 		response.put("timestamp", LocalDateTime.now());
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
@@ -71,6 +85,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(InsufficientFundsException.class)
 	public ResponseEntity<Object> insufficientFundsException(InsufficientFundsException ex,WebRequest request){
+		response.clear();
 		response.put("message", "Insufficiente funds, please check the amount");
 		response.put("timestap", LocalDateTime.now());
 		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
@@ -79,7 +94,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		
+		response.clear();
 		List<String> errors = ex.getAllErrors()
 				.stream()
 				.map( err -> "Field error: " +ex.getFieldError() + " " + ex.getLocalizedMessage())

@@ -3,6 +3,7 @@ package com.lchalela.banking.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -41,7 +42,8 @@ public class AccountController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> getAccountById(@PathVariable String id){
 		response.clear();
-		Account account = this.accountService.getAccount(Long.parseLong(id));
+		Account account = Optional.of(this.accountService.getAccount(Long.parseLong(id)))
+				.orElseThrow( () -> new NumberFormatException());
 		response.put("message", "Welcome, remember, never share personal information and password ");
 		response.put("account", account);
 	
@@ -60,7 +62,8 @@ public class AccountController {
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateAccountById(@Valid @RequestBody Account account, @PathVariable String id){
 		response.clear();
-		Account accountUpdate = this.accountService.AccountByIdupdate(Long.parseLong(id), account);
+		Account accountUpdate = Optional.of(this.accountService.AccountByIdupdate(Long.parseLong(id), account))
+				.orElseThrow(  () -> new NumberFormatException() );
 		response.put("message", "account updated successfull");
 		response.put("account", accountUpdate);
 		
@@ -70,7 +73,11 @@ public class AccountController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> AccountByIdDelete(@PathVariable String id){
 		response.clear();
-		this.accountService.AccountByIdDelete(Long.parseLong(id));
+		
+		Long idDelete = Optional.of(Long.parseLong(id))
+				.orElseThrow( () -> new NumberFormatException());
+		
+		this.accountService.AccountByIdDelete(idDelete);
 		response.put("message", "deleted account");
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}

@@ -3,6 +3,7 @@ package com.lchalela.banking.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -40,7 +41,9 @@ public class CustomerController {
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> findCustomerById(@PathVariable String id){
 		response.clear();
-		Customer customer = this.customerRepository.getById(Long.parseLong(id));
+		Customer customer = Optional.of( this.customerRepository.getById(Long.parseLong(id)))
+				.orElseThrow( () -> new NumberFormatException()) ;
+		
 		response.put("message", "found customer");
 		response.put("customer",customer);
 		return new ResponseEntity<>(response,HttpStatus.OK);
@@ -58,7 +61,10 @@ public class CustomerController {
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customer customer, @PathVariable String id){
 		response.clear();
-		this.customerRepository.updateById(Long.parseLong(id), customer);
+		
+		Long idUpdate = Optional.of( Long.parseLong(id)).orElseThrow( ()-> new NumberFormatException());
+		
+		this.customerRepository.updateById(idUpdate, customer);
 		response.put("message", "customer updated successfully");
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
