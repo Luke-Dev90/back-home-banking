@@ -1,6 +1,7 @@
 package com.lchalela.banking.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -53,6 +54,8 @@ public class Customer implements Serializable {
 	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Account account;
 
+	
+	
 	public Long getId() {
 		return id;
 	}
