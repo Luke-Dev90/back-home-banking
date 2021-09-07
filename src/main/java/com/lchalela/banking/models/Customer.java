@@ -2,6 +2,7 @@ package com.lchalela.banking.models;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,8 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Cascade;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "customers")
@@ -28,8 +34,8 @@ public class Customer implements Serializable {
 	private String name;
 	@NotEmpty
 	private String lastname;
-	
-	@NotEmpty
+
+	@NotBlank
 	@Column(unique=true)
 	private String dni;
 
@@ -41,8 +47,10 @@ public class Customer implements Serializable {
 	@Column(unique=true)
 	private String email;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties(value = {"customer","hibernateLazyInitializer", "handler"})
+	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	@JoinColumn(name = "account_id")
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Account account;
 
 	public Long getId() {
@@ -93,4 +101,13 @@ public class Customer implements Serializable {
 		this.account = account;
 	}
 
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	
 }

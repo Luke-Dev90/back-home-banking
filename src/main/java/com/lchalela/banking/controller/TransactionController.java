@@ -30,6 +30,7 @@ public class TransactionController {
 	
 	@GetMapping("/all")  // for admins
 	public ResponseEntity<?> listAllTransactions(){
+		response.clear();
 		List<Transaction> transactions = this.transactionService.listAllTransactions();
 		response.put("transactions", transactions);
 		return new ResponseEntity<>(response,HttpStatus.OK);
@@ -37,6 +38,7 @@ public class TransactionController {
 	
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> getTransactionId(@PathVariable String id){
+		response.clear();
 		Transaction transaction = this.transactionService.getById(Long.parseLong(id));
 		response.put("message", "transaction found successfully");
 		response.put("transaction", transaction);
@@ -46,6 +48,7 @@ public class TransactionController {
 	@PostMapping("/save")
 	public ResponseEntity<?> saveTransaction(@Valid @RequestBody Transaction transaction){
 		Transaction transactionNew = this.transactionService.saveTransaction(transaction);
+		response.clear();
 		response.put("transaction", transactionNew);
 		response.put("message", "sent transaction successfully");
 		return new ResponseEntity<>(response,HttpStatus.CREATED);

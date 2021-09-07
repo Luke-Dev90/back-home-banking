@@ -16,6 +16,10 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cascade;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="transactions")
 public class Transaction implements Serializable{
@@ -38,8 +42,10 @@ public class Transaction implements Serializable{
 	@NotEmpty
 	private String senderNumber;
 	
+	@JsonIgnoreProperties(value = {"transactions","hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="account_id")
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Account account;
 	
 	public Long getId() {
@@ -88,6 +94,14 @@ public class Transaction implements Serializable{
 
 	public void setSenderNumber(String senderNumber) {
 		this.senderNumber = senderNumber;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 

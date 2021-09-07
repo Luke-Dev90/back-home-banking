@@ -30,6 +30,7 @@ public class CustomerController {
 	
 	@GetMapping("/all")
 	public ResponseEntity<?> findAllCustomers(){
+		response.clear();
 		List<Customer> customers = this.customerRepository.listAllCustomers();
 		response.put("message", "List found customers");
 		response.put("customers", customers);
@@ -38,6 +39,7 @@ public class CustomerController {
 	
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> findCustomerById(@PathVariable String id){
+		response.clear();
 		Customer customer = this.customerRepository.getById(Long.parseLong(id));
 		response.put("message", "found customer");
 		response.put("customer",customer);
@@ -46,6 +48,7 @@ public class CustomerController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> saveCustomer(@Valid @RequestBody Customer customer){
+		response.clear();
 		Customer customerNew = this.customerRepository.registerCustomer(customer);
 		response.put("message","Congratulations, you are registred.");
 		response.put("customer",  customerNew);
@@ -54,6 +57,7 @@ public class CustomerController {
 	
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customer customer, @PathVariable String id){
+		response.clear();
 		this.customerRepository.updateById(Long.parseLong(id), customer);
 		response.put("message", "customer updated successfully");
 		return new ResponseEntity<>(response,HttpStatus.CREATED);

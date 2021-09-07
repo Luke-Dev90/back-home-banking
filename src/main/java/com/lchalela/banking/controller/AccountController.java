@@ -31,6 +31,7 @@ public class AccountController {
 	
 	@GetMapping("/all")
 	public ResponseEntity<?> listAllAccounts(){
+		response.clear();
 		List<Account> list = this.accountService.listAllAccount();	
 		response.put("message", "The list is found successfull");
 		response.put("list", list);	
@@ -39,7 +40,7 @@ public class AccountController {
 	
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> getAccountById(@PathVariable String id){
-		
+		response.clear();
 		Account account = this.accountService.getAccount(Long.parseLong(id));
 		response.put("message", "Welcome, remember, never share personal information and password ");
 		response.put("account", account);
@@ -49,6 +50,7 @@ public class AccountController {
 	
 	@PostMapping("/save")
 	public ResponseEntity<?> saveAccount(@Valid @RequestBody Account account){
+		response.clear();
 		this.accountService.saveAccount(account);	
 		response.put("message", "account created successfully");
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
@@ -57,8 +59,8 @@ public class AccountController {
 	
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateAccountById(@Valid @RequestBody Account account, @PathVariable String id){
-		
-		Account accountUpdate = this.accountService.updateAccountById(Long.parseLong(id), account);
+		response.clear();
+		Account accountUpdate = this.accountService.AccountByIdupdate(Long.parseLong(id), account);
 		response.put("message", "account updated successfull");
 		response.put("account", accountUpdate);
 		
@@ -66,8 +68,9 @@ public class AccountController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteAccountById(@PathVariable String id){
-		this.accountService.deleteAccountById(Long.parseLong(id));
+	public ResponseEntity<?> AccountByIdDelete(@PathVariable String id){
+		response.clear();
+		this.accountService.AccountByIdDelete(Long.parseLong(id));
 		response.put("message", "deleted account");
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}

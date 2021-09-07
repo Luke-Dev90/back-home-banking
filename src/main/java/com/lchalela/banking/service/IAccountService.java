@@ -14,9 +14,9 @@ public interface IAccountService {
 	
 	public Account getAccountByNumber(String account);
 	
-	public Account updateAccountById(Long id,Account account) ;
+	public Account AccountByIdupdate(Long id,Account account) ;
 	
-	public void deleteAccountById(Long id);
+	public void AccountByIdDelete(Long id);
 	
 	
 }

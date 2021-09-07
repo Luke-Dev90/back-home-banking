@@ -1,10 +1,11 @@
 package com.lchalela.banking.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.lchalela.banking.exceptions.InsufficientFundsException;
 import com.lchalela.banking.exceptions.ListTransactionNotFoundException;
 import com.lchalela.banking.models.Account;
@@ -29,33 +30,34 @@ public class TransactionImpl implements ITransactionService{
 	}
 	
 	@Override
+	@Transactional
 	public Transaction saveTransaction(Transaction transaction) {
 		
-		//find sender account sender
 		Account accountSender = this.accountService.getAccountByNumber(transaction.getSenderNumber());
-		//find destinaty isExists
-		Account accountDestinaty = this.accountService.getAccountByNumber(transaction.getSenderNumber());
-		
 
-		  //if money > amount_send OK
+		Account accountDestinaty = this.accountService.getAccountByNumber(transaction.getDestinyNumber());
+		
 		if(accountSender.getAviablemoney() < transaction.getAmount()) {
 			throw new InsufficientFundsException("Insuficient funds, please check the amount");
 		}
 		
-		Transaction transactionNew = this.saveTransaction(transaction);
+		Transaction transactionNew = this.transactionRepository.save(transaction);
 		
+		
+		
+		accountSender.addMovements(transactionNew);
+		accountDestinaty.addMovements(transactionNew);
 		
 		Double aviableMoneyNewSender = accountSender.getAviablemoney() - transaction.getAmount();  
 		accountSender.setAviablemoney(aviableMoneyNewSender);
-		accountSender.addTransaction(transactionNew);
 		
-		this.accountService.updateAccountById(accountSender.getId(),accountSender);
+
+		this.accountService.AccountByIdupdate(accountSender.getId(),accountSender);
 		
 		Double aviableMoneyNewDestinatary = accountDestinaty.getAviablemoney() + transaction.getAmount();
 		accountDestinaty.setAviablemoney(aviableMoneyNewDestinatary);
-		accountDestinaty.addTransaction(transactionNew);
 		
-		this.accountService.updateAccountById(accountSender.getId(),accountSender);
+		this.accountService.AccountByIdupdate(accountSender.getId(),accountSender);
 		
 		return transactionNew;
 	}

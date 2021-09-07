@@ -1,6 +1,7 @@
 package com.lchalela.banking.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +72,9 @@ public class CustomerImpl implements ICustomerService {
 	@Override
 	public List<Customer> listAllCustomers() {
 		List<Customer> customers = (List<Customer>) this.customerRepository.findAll();
+		
 		if (customers.isEmpty()) {
-			throw new ListNotFoundCustomers("List not found");
+			throw  new ListNotFoundCustomers("List not found");
 		} else {
 			return customers;
 		}
