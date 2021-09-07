@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lchalela.banking.exceptions.InsufficientFundsException;
+import com.lchalela.banking.exceptions.ListTransactionNotFoundException;
 import com.lchalela.banking.models.Account;
 import com.lchalela.banking.models.Transaction;
 import com.lchalela.banking.repository.TransactionRepository;
@@ -21,7 +23,7 @@ public class TransactionImpl implements ITransactionService{
 		List<Transaction> transactions =(List<Transaction>) this.transactionRepository.findAll();
 		
 		if(transactions.isEmpty()) {
-			// new ExceptionListNotFound
+			throw new ListTransactionNotFoundException("List transactions not founds");
 		}
 		return transactions;
 	}
@@ -37,7 +39,7 @@ public class TransactionImpl implements ITransactionService{
 
 		  //if money > amount_send OK
 		if(accountSender.getAviablemoney() < transaction.getAmount()) {
-			return null;  // retun exception FOUND INSUFICIENT
+			throw new InsufficientFundsException("Insuficient funds, please check the amount");
 		}
 		
 		Transaction transactionNew = this.saveTransaction(transaction);

@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lchalela.banking.exceptions.CustomerNotFoundId;
+import com.lchalela.banking.exceptions.ListNotFoundCustomers;
 import com.lchalela.banking.models.Account;
 import com.lchalela.banking.models.Customer;
 import com.lchalela.banking.repository.CustomerRepository;
@@ -44,7 +46,7 @@ public class CustomerImpl implements ICustomerService {
 		Customer customer = this.customerRepository.findById(id).orElse(null);
 
 		if (customer == null) {
-			return null; // create exception Not found id
+			throw new CustomerNotFoundId("Customer not fount with id : " + id);
 		} else {
 			return customer;
 		}
@@ -70,7 +72,7 @@ public class CustomerImpl implements ICustomerService {
 	public List<Customer> listAllCustomers() {
 		List<Customer> customers = (List<Customer>) this.customerRepository.findAll();
 		if (customers.isEmpty()) {
-			return null; // created new ExceptionList Not found.
+			throw new ListNotFoundCustomers("List not found");
 		} else {
 			return customers;
 		}
