@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lchalela.banking.exceptions.CustomerNotFoundId;
 import com.lchalela.banking.exceptions.ListNotFoundCustomers;
 import com.lchalela.banking.models.Account;
 import com.lchalela.banking.models.Customer;
+import com.lchalela.banking.models.Role;
 import com.lchalela.banking.repository.CustomerRepository;
 
 @Service
@@ -21,10 +23,12 @@ public class CustomerImpl implements ICustomerService {
 	@Autowired
 	private IAccountService accountService;
 
+
 	@Override
 	public Customer registerCustomer(Customer customer) {
 
 		Account accountNew = new Account();
+		
 		accountNew.setAviablemoney(0d);
 		accountNew.setNumber(UUID.randomUUID().toString());
 		String numberAcount = accountNew.getNumber();
@@ -34,6 +38,12 @@ public class CustomerImpl implements ICustomerService {
 		accountNew = this.accountService.getAccountByNumber(numberAcount);
 
 		Customer customerNew = customer;
+		
+		Role role = new Role();
+		role.setRole("ROLE_USERNAME");
+		
+		customerNew.addRole(role);
+		customerNew.setPassword(customer.getPassword());
 		customerNew.setAccount(accountNew);
 
 		this.customerRepository.save(customerNew);

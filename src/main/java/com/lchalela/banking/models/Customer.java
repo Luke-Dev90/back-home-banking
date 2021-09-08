@@ -11,8 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -43,6 +46,10 @@ public class Customer implements Serializable {
 	@Size(min = 5, max = 20)
 	private String password;
 
+	@NotEmpty
+	@Size(min= 8, max =20)
+	private String Username;
+	
 	@Email
 	@NotEmpty
 	@Column(unique=true)
@@ -54,7 +61,15 @@ public class Customer implements Serializable {
 	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Account account;
 
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name="customer_roles", joinColumns=@JoinColumn(name="customer_id")
+	,inverseJoinColumns=@JoinColumn(name="role_id"),
+	uniqueConstraints= {@UniqueConstraint(columnNames= {"customer_id","role_id"})})
+	private List<Role> roles;
 	
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
 	
 	public Long getId() {
 		return id;
@@ -110,6 +125,22 @@ public class Customer implements Serializable {
 
 	public void setDni(String dni) {
 		this.dni = dni;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public String getUsername() {
+		return Username;
+	}
+
+	public void setUsername(String username) {
+		Username = username;
 	}
 
 	
