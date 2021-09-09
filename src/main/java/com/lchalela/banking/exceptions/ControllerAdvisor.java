@@ -73,6 +73,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(CustomerNotFoundExcepetion.class)
+	public ResponseEntity<Object> customerNotFoundExcepetion(CustomerNotFoundExcepetion ex, WebRequest request){
+		response.clear();
+		response.put("message", "Customer not found");
+		response.put("timestamp", LocalDateTime.now());
+		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+	}
+	
 	//Exception Transaction
 	
 	@ExceptionHandler(ListTransactionNotFoundException.class)

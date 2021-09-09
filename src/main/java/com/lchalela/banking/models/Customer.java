@@ -48,7 +48,9 @@ public class Customer implements Serializable {
 
 	@NotEmpty
 	@Size(min= 8, max =20)
-	private String Username;
+	private String username;
+	
+	private Boolean enabled;
 	
 	@Email
 	@NotEmpty
@@ -106,6 +108,16 @@ public class Customer implements Serializable {
 	public String getEmail() {
 		return email;
 	}
+	
+	
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	public void setEmail(String email) {
 		this.email = email;
@@ -136,11 +148,11 @@ public class Customer implements Serializable {
 	}
 
 	public String getUsername() {
-		return Username;
+		return username;
 	}
 
 	public void setUsername(String username) {
-		Username = username;
+		this.username = username;
 	}
 
 	

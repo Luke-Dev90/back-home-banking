@@ -5,8 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.lchalela.banking.models.Customer;
 
+
 @Repository
 public interface CustomerRepository extends CrudRepository<Customer, Long>{
-
+	public Customer findByUsername(String username);
 	
 }

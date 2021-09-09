@@ -3,6 +3,7 @@ package com.lchalela.banking.auth;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
+	@Qualifier("authenticationManager")
 	private AuthenticationManager authenticationManager;
 	
 	@Override
@@ -33,7 +35,7 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("angularapp").secret(passwordEncoder.encode("bankingapp"))
+		clients.inMemory().withClient("angularapp").secret(passwordEncoder.encode("12345"))
 		.scopes("read","write")
 		.authorizedGrantTypes("password","refresh_token")
 		.accessTokenValiditySeconds(3600)

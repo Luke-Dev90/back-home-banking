@@ -2,11 +2,19 @@ package com.lchalela.banking.service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.lchalela.banking.exceptions.CustomerNotFoundExcepetion;
 import com.lchalela.banking.exceptions.CustomerNotFoundId;
 import com.lchalela.banking.exceptions.ListNotFoundCustomers;
 import com.lchalela.banking.models.Account;
@@ -15,14 +23,18 @@ import com.lchalela.banking.models.Role;
 import com.lchalela.banking.repository.CustomerRepository;
 
 @Service
-public class CustomerImpl implements ICustomerService {
+public class CustomerImpl implements ICustomerService ,UserDetailsService {
 
+	
+	
 	@Autowired
 	private CustomerRepository customerRepository;
 
 	@Autowired
 	private IAccountService accountService;
 
+	
+	
 
 	@Override
 	public Customer registerCustomer(Customer customer) {
@@ -87,6 +99,23 @@ public class CustomerImpl implements ICustomerService {
 		} else {
 			return customers;
 		}
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Customer customer = this.customerRepository.findByUsername(username);
+		
+		if(customer == null) {
+			throw new CustomerNotFoundExcepetion("No fount customer");
+		}
+		
+		List<GrantedAuthority> authorities = customer.getRoles()
+				.stream()
+				.map( role -> new SimpleGrantedAuthority(role.getRole() ))
+				.collect(Collectors.toList());
+					
+		return new User(customer.getUsername(),customer.getPassword(),customer.getEnabled(),true,true,true,authorities);
 	}
 
 }
