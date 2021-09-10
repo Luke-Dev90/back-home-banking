@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class TransactionController {
 	private ITransactionService transactionService;
 	private Map<String,Object> response = new HashMap<>();
 	
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/all")  // for admins
 	public ResponseEntity<?> listAllTransactions(){
 		response.clear();
@@ -37,6 +39,7 @@ public class TransactionController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> getTransactionId(@PathVariable String id){
 		response.clear();
@@ -49,6 +52,7 @@ public class TransactionController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PostMapping("/save")
 	public ResponseEntity<?> saveTransaction(@Valid @RequestBody Transaction transaction){
 		Transaction transactionNew = this.transactionService.saveTransaction(transaction);

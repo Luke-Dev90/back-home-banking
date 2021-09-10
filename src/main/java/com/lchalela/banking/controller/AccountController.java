@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class AccountController {
 	private IAccountService accountService;
 	private	Map<String,Object> response = new HashMap<>();
 	
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/all")
 	public ResponseEntity<?> listAllAccounts(){
 		response.clear();
@@ -39,6 +41,7 @@ public class AccountController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> getAccountById(@PathVariable String id){
 		response.clear();
@@ -50,6 +53,7 @@ public class AccountController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/save")
 	public ResponseEntity<?> saveAccount(@Valid @RequestBody Account account){
 		response.clear();
@@ -58,7 +62,7 @@ public class AccountController {
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
 	
-	
+	@Secured("ROLE_ADMIN")
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateAccountById(@Valid @RequestBody Account account, @PathVariable String id){
 		response.clear();
@@ -70,6 +74,7 @@ public class AccountController {
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> AccountByIdDelete(@PathVariable String id){
 		response.clear();

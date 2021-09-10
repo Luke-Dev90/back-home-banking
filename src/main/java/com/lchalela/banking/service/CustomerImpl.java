@@ -22,6 +22,7 @@ import com.lchalela.banking.models.Customer;
 import com.lchalela.banking.models.Role;
 import com.lchalela.banking.repository.CustomerRepository;
 
+
 @Service
 public class CustomerImpl implements ICustomerService ,UserDetailsService {
 
@@ -84,7 +85,8 @@ public class CustomerImpl implements ICustomerService ,UserDetailsService {
 		customerResult.setLastname(customer.getLastname());
 		customerResult.setName(customer.getName());
 		customerResult.setPassword(customer.getPassword());
-
+		customerResult.setDni(customer.getDni());
+		customerResult.setEnabled(customer.getEnabled());
 		this.customerRepository.save(customerResult);
 
 		return customerResult;
@@ -116,6 +118,12 @@ public class CustomerImpl implements ICustomerService ,UserDetailsService {
 				.collect(Collectors.toList());
 					
 		return new User(customer.getUsername(),customer.getPassword(),customer.getEnabled(),true,true,true,authorities);
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public Customer findByUsername(String username) {
+		return customerRepository.findByUsername(username);
 	}
 
 }

@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class CustomerController {
 	private ICustomerService customerRepository;
 	private Map<String,Object> response = new HashMap<>();
 	
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/all")
 	public ResponseEntity<?> findAllCustomers(){
 		response.clear();
@@ -38,6 +40,7 @@ public class CustomerController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/get/{id}")
 	public ResponseEntity<?> findCustomerById(@PathVariable String id){
 		response.clear();
@@ -49,6 +52,7 @@ public class CustomerController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	
+	
 	@PostMapping("/register")
 	public ResponseEntity<?> saveCustomer(@Valid @RequestBody Customer customer){
 		response.clear();
@@ -58,6 +62,7 @@ public class CustomerController {
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customer customer, @PathVariable String id){
 		response.clear();

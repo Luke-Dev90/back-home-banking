@@ -14,4 +14,6 @@ public interface ICustomerService {
 	public Customer updateById(Long id,Customer customer);
 	
 	public List<Customer> listAllCustomers();
+	
+	public Customer findByUsername(String username);
 }

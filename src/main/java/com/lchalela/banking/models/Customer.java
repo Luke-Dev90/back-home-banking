@@ -43,7 +43,7 @@ public class Customer implements Serializable {
 	@Column(unique=true)
 	private String dni;
 
-	@Size(min = 5, max = 20)
+	@Size(min = 5)
 	private String password;
 
 	@NotEmpty
